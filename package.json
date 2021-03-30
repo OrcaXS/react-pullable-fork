@@ -10,8 +10,7 @@
   },
   "sideEffects": false,
   "files": [
-    "css",
-    "mjs"
+    "dist"
   ],
   "scripts": {
     "build": "rollup -c",
