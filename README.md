@@ -1,16 +1,14 @@
-# 🙋 React Pullable
+# React Pullable (Fork)
 
-Simple, customizable React component for pull to refresh on touch devices.
-
-[Play with the demo](https://sconstantinides.github.io/react-pullable/)
+Forked from [Stelios Constantinides's react-pullable](https://github.com/sconstantinides/react-pullable). Added types, removed style-components, and some minor refactorings. ESM only.
 
 ![GIF](screencap.gif)
 
 ## Usage
 
-Install with `yarn add react-pullable` or `npm install react-pullable`
+Install with `yarn add @orcaxs/react-pullable` or `npm install @orcaxs/react-pullable`
 
-Import in your components with `import Pullable from 'react-pullable'`
+Import in your components with `import { Pullable } from '@orcaxs/react-pullable'`
 
 ### Component styles
 
@@ -67,12 +65,11 @@ Using some optional props:
 ```        
 
 ## Credits
+Original Author [Stelios Constantinides's react-pullable](https://github.com/sconstantinides/react-pullable)
 
 Inspired by [BoxFactura’s PulltoRefresh.js](https://www.boxfactura.com/pulltorefresh.js/)
 
 Spinner SVG from [Feather Icons](https://feather.netlify.com/)
-
-Built using [NWB](https://github.com/insin/nwb/blob/master/docs/guides/ReactComponents.md#developing-react-components-and-libraries-with-nwb)
 
 ## Contributing
 

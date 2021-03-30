@@ -1,42 +1,74 @@
 {
-  "name": "react-pullable",
+  "name": "@orcaxs/react-pullable",
   "version": "1.0.5",
-  "description": "Simple, customizable pull to refresh.",
-  "main": "lib/index.js",
-  "module": "es/index.js",
+  "description": "Simple, customizable pull to refresh fork.",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  },
+  "sideEffects": false,
   "files": [
     "css",
-    "es",
-    "lib",
-    "umd"
+    "mjs"
   ],
   "scripts": {
-    "build": "nwb build-react-component",
-    "clean": "nwb clean-module && nwb clean-demo",
-    "start": "nwb serve-react-demo",
-    "deploy": "gh-pages -d demo/dist"
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "prettier": "prettier --write ./src"
   },
   "dependencies": {
-    "prop-types": "^15.6.1",
-    "styled-components": "^3.2.6"
+    "@linaria/react": "^3.0.0-beta.1"
   },
   "peerDependencies": {
-    "react": "16.x"
+    "react": "17.x"
   },
   "devDependencies": {
-    "gh-pages": "^1.1.0",
-    "nwb": "^0.21.5",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2"
+    "@linaria/babel-preset": "^3.0.0-beta.1",
+    "@linaria/core": "^3.0.0-beta.1",
+    "@linaria/rollup": "^3.0.0-beta.1",
+    "@linaria/shaker": "^3.0.0-beta.1",
+    "@rollup/plugin-node-resolve": "^11.2.1",
+    "@rollup/plugin-typescript": "^8.2.1",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-react": "7.23.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-unicorn": "^29.0.0",
+    "gh-pages": "^3.1.0",
+    "has": "^1.0.3",
+    "nwb": "^0.25.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "rollup-plugin-css-only": "^3.1.0",
+    "tslib": "^1.14.1",
+    "typescript": "^4.2.3"
   },
-  "author": "Stelios Constantinides <sconstantinides@gmail.com>",
+  "author": "OrcaXS Suen <iorcaxs@gmail.com>",
   "license": "MIT",
-  "repository": "https://github.com/sconstantinides/react-pullable",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OrcaXS/react-pullable-fork.git"
+  },
   "keywords": [
     "react",
     "touch",
     "pull",
     "refresh",
     "reload"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/OrcaXS/react-pullable-fork/issues"
+  },
+  "homepage": "https://github.com/OrcaXS/react-pullable-fork#readme"
 }
