@@ -11,6 +11,13 @@ export default {
       dir: 'dist',
       entryFileNames: 'index.mjs',
       format: 'esm',
+      sourcemap: true,
+    },
+    {
+      dir: 'dist',
+      entryFileNames: 'index.js',
+      format: 'cjs',
+      sourcemap: true,
     },
   ],
   plugins: [

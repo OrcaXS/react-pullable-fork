@@ -2,7 +2,7 @@
   "name": "@orcaxs/react-pullable",
   "version": "1.0.6-1",
   "description": "Simple, customizable pull to refresh fork.",
-  "main": "dist/index.mjs",
+  "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "typescript": {

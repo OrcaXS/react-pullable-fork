@@ -20,5 +20,4 @@ export declare type PullableProperties = {
     disabled?: boolean;
 };
 declare const Pullable: ({ className, children, onRefresh, centerSpinner, fadeSpinner, rotateSpinner, spinnerSize, spinnerOffset, spinnerColor, spinSpeed, popDuration, distThreshold, resistance, refreshDuration, resetDuration, resetEase, shouldPullToRefresh, disabled, }: PullableProperties) => JSX.Element;
-export default Pullable;
 export { Pullable };

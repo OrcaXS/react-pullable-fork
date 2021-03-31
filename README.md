@@ -1,6 +1,6 @@
 # React Pullable (Fork)
 
-Forked from [Stelios Constantinides's react-pullable](https://github.com/sconstantinides/react-pullable). Added types, removed style-components, and some minor refactorings. ESM only.
+Forked from [Stelios Constantinides's react-pullable](https://github.com/sconstantinides/react-pullable). Added types, removed style-components, and some minor refactorings.
 
 ![GIF](screencap.gif)
 

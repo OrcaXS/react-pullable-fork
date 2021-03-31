@@ -1,6 +1,31 @@
-import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
-import * as React from 'react';
-import { useState, useCallback, useEffect } from 'react';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var jsxRuntime = require('react/jsx-runtime');
+var React = require('react');
+
+function _interopNamespace(e) {
+  if (e && e.__esModule) return e;
+  var n = Object.create(null);
+  if (e) {
+    Object.keys(e).forEach(function (k) {
+      if (k !== 'default') {
+        var d = Object.getOwnPropertyDescriptor(e, k);
+        Object.defineProperty(n, k, d.get ? d : {
+          enumerable: true,
+          get: function () {
+            return e[k];
+          }
+        });
+      }
+    });
+  }
+  n['default'] = e;
+  return Object.freeze(n);
+}
+
+var React__namespace = /*#__PURE__*/_interopNamespace(React);
 
 function memoize(fn) {
   var cache = {};
@@ -108,13 +133,13 @@ function styled(tag) {
         // If the underlying tag is a styled component, forward the `as` prop
         // Otherwise the styles from the underlying component will be ignored
         filteredProps.as = component;
-        return /*#__PURE__*/React.createElement(tag, filteredProps);
+        return /*#__PURE__*/React__namespace.createElement(tag, filteredProps);
       }
 
-      return /*#__PURE__*/React.createElement(component, filteredProps);
+      return /*#__PURE__*/React__namespace.createElement(component, filteredProps);
     };
 
-    const Result = React.forwardRef ? /*#__PURE__*/React.forwardRef(render) : // React.forwardRef won't available on older React versions and in Preact
+    const Result = React__namespace.forwardRef ? /*#__PURE__*/React__namespace.forwardRef(render) : // React.forwardRef won't available on older React versions and in Preact
     // Fallback to a innerRef prop in that case
     props => {
       const rest = restOp(props, ['innerRef']);
@@ -185,12 +210,12 @@ const Pullable = ({
   shouldPullToRefresh = () => window.scrollY <= 0,
   disabled = false
 }) => {
-  const [status, setStatus] = useState('ready');
-  const [height, setHeight] = useState(0);
-  const [pullStartY, setPullStartY] = useState();
-  const [dist, setDist] = useState(0);
-  const [distResisted, setDistResisted] = useState(0);
-  const [ignoreTouches, setIgnoreTouches] = useState(false);
+  const [status, setStatus] = React.useState('ready');
+  const [height, setHeight] = React.useState(0);
+  const [pullStartY, setPullStartY] = React.useState();
+  const [dist, setDist] = React.useState(0);
+  const [distResisted, setDistResisted] = React.useState(0);
+  const [ignoreTouches, setIgnoreTouches] = React.useState(false);
   let resetTimeout;
   let refreshCompletedTimeout;
 
@@ -215,7 +240,7 @@ const Pullable = ({
     }, refreshDuration);
   };
 
-  const onTouchStart = useCallback(touchEvent => {
+  const onTouchStart = React.useCallback(touchEvent => {
     if (disabled || ignoreTouches) return;
 
     if (status === 'ready' && shouldPullToRefresh()) {
@@ -224,7 +249,7 @@ const Pullable = ({
       setPullStartY(undefined);
     }
   }, [disabled, ignoreTouches, shouldPullToRefresh, status]);
-  const onTouchMove = useCallback(touchEvent => {
+  const onTouchMove = React.useCallback(touchEvent => {
     if (disabled || ignoreTouches || pullStartY === undefined) return;
     const movedY = touchEvent.touches[0].screenY; // setPullMoveY(movedY);
 
@@ -242,7 +267,7 @@ const Pullable = ({
       }
     }
   }, [disabled, dist, distResisted, distThreshold, ignoreTouches, pullStartY, refresh, resistance]);
-  const onTouchEnd = useCallback(() => {
+  const onTouchEnd = React.useCallback(() => {
     if (disabled || ignoreTouches) return;
 
     if (status === 'pulling') {
@@ -254,13 +279,13 @@ const Pullable = ({
       reset();
     }
   }, [disabled, ignoreTouches, reset, resetDuration, status]);
-  useEffect(() => {
+  React.useEffect(() => {
     window.addEventListener('touchstart', onTouchStart);
     return () => {
       window.removeEventListener('touchstart', onTouchStart);
     };
   }, [onTouchStart]);
-  useEffect(() => {
+  React.useEffect(() => {
     window.addEventListener('touchmove', onTouchMove, {
       passive: false
     });
@@ -268,13 +293,13 @@ const Pullable = ({
       window.removeEventListener('touchmove', onTouchMove);
     };
   }, [onTouchMove]);
-  useEffect(() => {
+  React.useEffect(() => {
     window.addEventListener('touchend', onTouchEnd);
     return () => {
       window.removeEventListener('touchend', onTouchEnd);
     };
   }, [onTouchEnd]);
-  useEffect(() => {
+  React.useEffect(() => {
     return () => {
       window.clearTimeout(refreshCompletedTimeout);
       window.clearTimeout(resetTimeout);
@@ -283,8 +308,8 @@ const Pullable = ({
   const shouldSpin = status === 'refreshing' || status === 'refreshCompleted';
   const shouldReset = status === 'pullAborted' || status === 'refreshCompleted';
   const pctPulled = height / distThreshold;
-  return jsxs(Fragment, {
-    children: [jsx(Container, Object.assign({
+  return jsxRuntime.jsxs(jsxRuntime.Fragment, {
+    children: [jsxRuntime.jsx(Container, Object.assign({
       className: className,
       actualHeight: height,
       centerSpinner: centerSpinner,
@@ -292,7 +317,7 @@ const Pullable = ({
       resetEase: resetEase,
       shouldReset: shouldReset
     }, {
-      children: jsx(Spinner, Object.assign({
+      children: jsxRuntime.jsx(Spinner, Object.assign({
         pctPulled: pctPulled,
         fadeSpinner: fadeSpinner,
         rotateSpinner: rotateSpinner,
@@ -303,7 +328,7 @@ const Pullable = ({
         shouldReset: shouldReset,
         shouldSpin: shouldSpin
       }, {
-        children: jsxs(SpinnerSVG, Object.assign({
+        children: jsxRuntime.jsxs(SpinnerSVG, Object.assign({
           viewBox: "0 0 24 24",
           fill: "none",
           strokeWidth: "2",
@@ -315,42 +340,42 @@ const Pullable = ({
           spinSpeed: spinSpeed,
           shouldSpin: shouldSpin
         }, {
-          children: [jsx("line", {
+          children: [jsxRuntime.jsx("line", {
             x1: "12",
             y1: "2",
             x2: "12",
             y2: "6"
-          }, void 0), jsx("line", {
+          }, void 0), jsxRuntime.jsx("line", {
             x1: "12",
             y1: "18",
             x2: "12",
             y2: "22"
-          }, void 0), jsx("line", {
+          }, void 0), jsxRuntime.jsx("line", {
             x1: "4.93",
             y1: "4.93",
             x2: "7.76",
             y2: "7.76"
-          }, void 0), jsx("line", {
+          }, void 0), jsxRuntime.jsx("line", {
             x1: "16.24",
             y1: "16.24",
             x2: "19.07",
             y2: "19.07"
-          }, void 0), jsx("line", {
+          }, void 0), jsxRuntime.jsx("line", {
             x1: "2",
             y1: "12",
             x2: "6",
             y2: "12"
-          }, void 0), jsx("line", {
+          }, void 0), jsxRuntime.jsx("line", {
             x1: "18",
             y1: "12",
             x2: "22",
             y2: "12"
-          }, void 0), jsx("line", {
+          }, void 0), jsxRuntime.jsx("line", {
             x1: "4.93",
             y1: "19.07",
             x2: "7.76",
             y2: "16.24"
-          }, void 0), jsx("line", {
+          }, void 0), jsxRuntime.jsx("line", {
             x1: "16.24",
             y1: "7.76",
             x2: "19.07",
@@ -362,5 +387,5 @@ const Pullable = ({
   }, void 0);
 };
 
-export { Pullable };
-//# sourceMappingURL=index.mjs.map
+exports.Pullable = Pullable;
+//# sourceMappingURL=index.js.map

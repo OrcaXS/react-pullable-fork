@@ -301,5 +301,4 @@ const Pullable = ({
   );
 };
 
-export default Pullable;
 export { Pullable };
