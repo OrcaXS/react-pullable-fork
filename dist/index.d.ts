@@ -1,5 +1,5 @@
 /// <reference types="react" />
-declare type PullableProperties = {
+export declare type PullableProperties = {
     children?: JSX.Element | null;
     onRefresh?: () => void;
     className?: string;

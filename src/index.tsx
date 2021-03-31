@@ -79,7 +79,7 @@ const SpinnerSVG = styled.svg<{
   } ;
 `;
 
-type PullableProperties = {
+export type PullableProperties = {
   children?: JSX.Element | null;
   onRefresh?: () => void;
   className?: string;

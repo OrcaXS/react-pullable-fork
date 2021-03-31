@@ -8,8 +8,11 @@ Forked from [Stelios Constantinides's react-pullable](https://github.com/sconsta
 
 Install with `yarn add @orcaxs/react-pullable` or `npm install @orcaxs/react-pullable`
 
-Import in your components with `import { Pullable } from '@orcaxs/react-pullable'`
-
+Import in your components with 
+```js
+import { Pullable } from '@orcaxs/react-pullable'
+import '@orcaxs/react-pullable/dist/styles.css'
+```
 ### Component styles
 
 To prevent Chrome overscroll set `overscroll-behavior-y: contain [or] none;` on `<body>` ([learn more](https://developers.google.com/web/updates/2017/11/overscroll-behavior)).
