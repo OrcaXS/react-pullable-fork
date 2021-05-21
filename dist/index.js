@@ -47,9 +47,9 @@ var index = memoize(function (prop) {
 /* Z+1 */
 );
 
-function cx(...classNames) {
-  return classNames.filter(Boolean).join(' ');
-}
+const cx = function cx() {
+  return Array.prototype.slice.call(arguments).filter(Boolean).join(' ');
+};
 
 /**
  * This file contains an runtime version of `styled` component. Responsibilities of the component are:
@@ -59,9 +59,10 @@ function cx(...classNames) {
  */
 
 // Workaround for rest operator
-const restOp = (obj, keysToExclude) => Object.keys(obj).filter(prop => !keysToExclude.includes(prop)).reduce((acc, curr) => Object.assign(acc, {
-  [curr]: obj[curr]
-}), {}); // rest operator workaround
+const restOp = (obj, keysToExclude) => Object.keys(obj).filter(prop => keysToExclude.indexOf(prop) === -1).reduce((acc, curr) => {
+  acc[curr] = obj[curr];
+  return acc;
+}, {}); // rest operator workaround
 
 
 const warnIfInvalid = (value, componentName) => {
@@ -75,8 +76,7 @@ const warnIfInvalid = (value, componentName) => {
 
     console.warn(`An interpolation evaluated to '${stringified}' in the component '${componentName}', which is probably a mistake. You should explicitly cast or transform the value to a string.`);
   }
-}; // If styled wraps custom component, that component should have className property
-
+};
 
 function styled(tag) {
   return options => {
@@ -126,7 +126,16 @@ function styled(tag) {
           style[`--${name}`] = `${value}${unit}`;
         }
 
-        filteredProps.style = Object.assign(style, filteredProps.style);
+        const ownStyle = filteredProps.style || {};
+        const keys = Object.keys(ownStyle);
+
+        if (keys.length > 0) {
+          keys.forEach(key => {
+            style[key] = ownStyle[key];
+          });
+        }
+
+        filteredProps.style = style;
       }
 
       if (tag.__linaria && tag !== component) {
@@ -212,53 +221,44 @@ const Pullable = ({
 }) => {
   const [status, setStatus] = React.useState('ready');
   const [height, setHeight] = React.useState(0);
-  const [pullStartY, setPullStartY] = React.useState();
-  const [dist, setDist] = React.useState(0);
-  const [distResisted, setDistResisted] = React.useState(0);
+  const pullStartY = React.useRef();
+  const dist = React.useRef(0);
+  const distResisted = React.useRef(0);
   const [ignoreTouches, setIgnoreTouches] = React.useState(false);
-  let resetTimeout;
-  let refreshCompletedTimeout;
-
-  const reset = (delay = 0) => {
-    resetTimeout = window.setTimeout(() => {
-      setPullStartY(undefined);
-      setDist(0);
-      setDistResisted(0);
+  const resetTimeout = React.useRef();
+  const refreshCompletedTimeout = React.useRef();
+  const reset = React.useCallback((delay = 0) => {
+    resetTimeout.current = window.setTimeout(() => {
+      pullStartY.current = undefined;
+      dist.current = 0;
+      distResisted.current = 0;
       setIgnoreTouches(false);
       setStatus('ready');
     }, delay);
-  };
-
-  const refresh = () => {
+  }, []);
+  const refresh = React.useCallback(() => {
     setIgnoreTouches(true);
     setStatus('refreshing');
     onRefresh?.();
-    refreshCompletedTimeout = window.setTimeout(() => {
+    refreshCompletedTimeout.current = window.setTimeout(() => {
       setStatus('refreshCompleted');
       setHeight(0);
       reset(resetDuration);
     }, refreshDuration);
-  };
-
+  }, [onRefresh, refreshDuration, reset, resetDuration]);
   const onTouchStart = React.useCallback(touchEvent => {
     if (disabled || ignoreTouches) return;
-
-    if (status === 'ready' && shouldPullToRefresh()) {
-      setPullStartY(touchEvent.touches[0].screenY);
-    } else {
-      setPullStartY(undefined);
-    }
+    pullStartY.current = status === 'ready' && shouldPullToRefresh() ? touchEvent.touches[0].screenY : undefined;
   }, [disabled, ignoreTouches, shouldPullToRefresh, status]);
   const onTouchMove = React.useCallback(touchEvent => {
     if (disabled || ignoreTouches || pullStartY === undefined) return;
     const movedY = touchEvent.touches[0].screenY; // setPullMoveY(movedY);
 
-    setDist(movedY - pullStartY);
+    dist.current = movedY - (pullStartY.current || 0);
 
-    if (dist > 0) {
+    if (dist.current > 0) {
       touchEvent.preventDefault();
-      const minDist = Math.min(dist / resistance, distThreshold);
-      setDistResisted(distResisted);
+      const minDist = Math.min(dist.current / resistance, distThreshold);
       setStatus('pulling');
       setHeight(minDist);
 
@@ -266,7 +266,7 @@ const Pullable = ({
         refresh();
       }
     }
-  }, [disabled, dist, distResisted, distThreshold, ignoreTouches, pullStartY, refresh, resistance]);
+  }, [disabled, dist, distThreshold, ignoreTouches, refresh, resistance]);
   const onTouchEnd = React.useCallback(() => {
     if (disabled || ignoreTouches) return;
 
@@ -301,8 +301,8 @@ const Pullable = ({
   }, [onTouchEnd]);
   React.useEffect(() => {
     return () => {
-      window.clearTimeout(refreshCompletedTimeout);
-      window.clearTimeout(resetTimeout);
+      window.clearTimeout(refreshCompletedTimeout.current);
+      window.clearTimeout(resetTimeout.current);
     };
   }, []);
   const shouldSpin = status === 'refreshing' || status === 'refreshCompleted';
