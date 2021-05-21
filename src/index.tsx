@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { styled } from '@linaria/react';
 
 const Container = styled.div<{
@@ -59,7 +59,6 @@ const SpinnerSVG = styled.svg<{
     p.shouldSpin
       ? `scale ${p.popDuration}ms cubic-bezier(0.55, 0.055, 0.675, 0.19), rotate360 ${p.spinSpeed}ms linear ${p.popDuration}ms infinite`
       : 'none'};
-
   @keyframes scale {
     0% {
       transform: scale(1.3);
@@ -68,7 +67,6 @@ const SpinnerSVG = styled.svg<{
       transform: scale(1);
     }
   }
-
   @keyframes rotate360 {
     from {
       transform: rotate(0deg);
@@ -130,45 +128,43 @@ const Pullable = ({
   const [status, setStatus] = useState<Status>('ready');
   const [height, setHeight] = useState(0);
 
-  const [pullStartY, setPullStartY] = useState<number | undefined>();
-  const [dist, setDist] = useState(0);
-  const [distResisted, setDistResisted] = useState(0);
+  const pullStartY = useRef<number | undefined>();
+  const dist = useRef<number>(0);
+  const distResisted = useRef(0);
   const [ignoreTouches, setIgnoreTouches] = useState(false);
 
-  let resetTimeout: number;
-  let refreshCompletedTimeout: number;
+  const resetTimeout = useRef<any>();
+  const refreshCompletedTimeout = useRef<any>();
 
-  const reset = (delay = 0) => {
-    resetTimeout = window.setTimeout(() => {
-      setPullStartY(undefined);
-      setDist(0);
-      setDistResisted(0);
+  const reset = useCallback((delay = 0) => {
+    resetTimeout.current = window.setTimeout(() => {
+      pullStartY.current = undefined;
+      dist.current = 0;
+      distResisted.current = 0;
       setIgnoreTouches(false);
       setStatus('ready');
     }, delay);
-  };
-
-  const refresh = () => {
+  }, []);
+  const refresh = useCallback(() => {
     setIgnoreTouches(true);
     setStatus('refreshing');
     onRefresh?.();
 
-    refreshCompletedTimeout = window.setTimeout(() => {
+    refreshCompletedTimeout.current = window.setTimeout(() => {
       setStatus('refreshCompleted');
       setHeight(0);
       reset(resetDuration);
     }, refreshDuration);
-  };
+  }, [onRefresh, refreshDuration, reset, resetDuration]);
 
   const onTouchStart = useCallback(
     (touchEvent: TouchEvent) => {
       if (disabled || ignoreTouches) return;
 
-      if (status === 'ready' && shouldPullToRefresh()) {
-        setPullStartY(touchEvent.touches[0].screenY);
-      } else {
-        setPullStartY(undefined);
-      }
+      pullStartY.current =
+        status === 'ready' && shouldPullToRefresh()
+          ? touchEvent.touches[0].screenY
+          : undefined;
     },
     [disabled, ignoreTouches, shouldPullToRefresh, status],
   );
@@ -179,14 +175,13 @@ const Pullable = ({
 
       const movedY = touchEvent.touches[0].screenY;
       // setPullMoveY(movedY);
-      setDist(movedY - pullStartY);
+      dist.current = movedY - (pullStartY.current || 0);
 
-      if (dist > 0) {
+      if (dist.current > 0) {
         touchEvent.preventDefault();
 
-        const minDist = Math.min(dist / resistance, distThreshold);
+        const minDist = Math.min(dist.current / resistance, distThreshold);
 
-        setDistResisted(distResisted);
         setStatus('pulling');
         setHeight(minDist);
 
@@ -195,16 +190,7 @@ const Pullable = ({
         }
       }
     },
-    [
-      disabled,
-      dist,
-      distResisted,
-      distThreshold,
-      ignoreTouches,
-      pullStartY,
-      refresh,
-      resistance,
-    ],
+    [disabled, dist, distThreshold, ignoreTouches, refresh, resistance],
   );
 
   const onTouchEnd = useCallback(() => {
@@ -243,8 +229,8 @@ const Pullable = ({
 
   useEffect(() => {
     return () => {
-      window.clearTimeout(refreshCompletedTimeout);
-      window.clearTimeout(resetTimeout);
+      window.clearTimeout(refreshCompletedTimeout.current);
+      window.clearTimeout(resetTimeout.current);
     };
   }, []);
 
