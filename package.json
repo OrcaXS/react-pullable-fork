@@ -17,15 +17,13 @@
     "watch": "rollup -c -w",
     "prettier": "prettier --write ./src"
   },
-  "dependencies": {
-    "@linaria/react": "^3.0.0-beta.4"
-  },
   "peerDependencies": {
     "react": "17.x"
   },
   "devDependencies": {
     "@linaria/babel-preset": "^3.0.0-beta.4",
     "@linaria/core": "^3.0.0-beta.4",
+    "@linaria/react": "^3.0.0-beta.4",
     "@linaria/rollup": "^3.0.0-beta.4",
     "@linaria/shaker": "^3.0.0-beta.4",
     "@rollup/plugin-node-resolve": "^13.0.0",
