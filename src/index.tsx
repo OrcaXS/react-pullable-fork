@@ -171,7 +171,7 @@ const Pullable = ({
 
   const onTouchMove = useCallback(
     (touchEvent: TouchEvent) => {
-      if (disabled || ignoreTouches || pullStartY === undefined) return;
+      if (disabled || ignoreTouches || pullStartY.current === undefined) return;
 
       const movedY = touchEvent.touches[0].screenY;
       // setPullMoveY(movedY);

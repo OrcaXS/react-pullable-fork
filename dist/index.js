@@ -251,7 +251,7 @@ const Pullable = ({
     pullStartY.current = status === 'ready' && shouldPullToRefresh() ? touchEvent.touches[0].screenY : undefined;
   }, [disabled, ignoreTouches, shouldPullToRefresh, status]);
   const onTouchMove = React.useCallback(touchEvent => {
-    if (disabled || ignoreTouches || pullStartY === undefined) return;
+    if (disabled || ignoreTouches || pullStartY.current === undefined) return;
     const movedY = touchEvent.touches[0].screenY; // setPullMoveY(movedY);
 
     dist.current = movedY - (pullStartY.current || 0);
